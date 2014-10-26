@@ -4,6 +4,7 @@ requirejs.config({
   path: {
     util: './util'
   },
+  packages: ['model'],
   nodeRequire: require
 });
 
@@ -14,7 +15,7 @@ requirejs([
 
   'util',
 
-  'model/Suit',
+  'model',
 ], function(
   express,
   http,
@@ -22,7 +23,7 @@ requirejs([
 
   util,
 
-  Suit
+  model
 ){
   var 
       app = express(),
@@ -45,8 +46,7 @@ requirejs([
 
   });
 
-
   server.listen(3000, function(){
-    console.log('the sever started at 3000');
+    console.log('The sever started at 3000');
   });
 });

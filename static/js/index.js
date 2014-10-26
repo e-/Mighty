@@ -3,14 +3,15 @@ requirejs.config({
   paths: {
     'socket.io': '../socket.io/socket.io',
     'jquery': 'lib/jquery-2.1.1.min'
-  }
+  },
+  packages: ['model']
 });
 
 requirejs([
   'socket.io', 
   'jquery',
-  'model/Suit'
-], function(socketio, $, Suit){
+  'model'
+], function(socketio, $, model){
   var socket = socketio();
   
   $('#chat').submit(function(){
