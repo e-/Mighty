@@ -38,12 +38,19 @@ requirejs([
     res.render('index');
   });
   
+  var history = [];
   io.on('connection', function(socket){
-    console.log('connected');
-    socket.on('lobby/chat/submit', function(msg){
-      io.emit('lobby/chat/add', util.escape(msg));
+    history.forEach(function(h){
+      socket.emit('lobby/chat/add', h);
     });
 
+    socket.on('lobby/chat/submit', function(msg){
+      var escaped = util.escape(msg);
+      history.push(escaped);
+      history = history.slice(history.length - 10 < 0 ? 0 : history.length - 10, history.length);
+
+      io.emit('lobby/chat/add', escaped);
+    });
   });
 
   server.listen(3000, function(){
