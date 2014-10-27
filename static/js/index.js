@@ -31,6 +31,6 @@ requirejs([
     hand.cards.forEach(function(card){
       $('#hand').append(card.get$());
     });
-    UI.arrangeHand();
+    UI.arrangeHand(hand.cards.length);
   });
 });

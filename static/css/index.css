@@ -10,8 +10,6 @@ body{
   border-radius: 5px;
   position:absolute;
   z-index:1;
-  left:0;
-  bottom:0;
   -webkit-user-drag: none;
 
   -webkit-transform: translate(0px, 0px);
@@ -19,7 +17,7 @@ body{
   transition : transform 0.1s linear, box-shadow 0.1s linear;
 }
 
-.card:hover{
+.card.mine:hover{
   -webkit-box-shadow : 0 0 18px #000, inset 0 0 18px #999;
      -moz-box-shadow : 0 0 18px #000, inset 0 0 18px #999;
           box-shadow : 0 0 18px #000, inset 0 0 18px #999;  
@@ -31,4 +29,42 @@ body{
 #hand{
   position:fixed;
   bottom:0;
+}
+
+#hand2{
+  position:fixed;
+  left:0;
+  top:0;
+}
+
+#hand3{
+  position:fixed;
+  top:-20px;
+  left:0;
+}
+
+#hand4{
+  position:fixed;
+  top:-20px;
+  left:0;
+}
+
+#hand5{
+  position:fixed;
+  right:0;
+  bottom:0;
+}
+
+.card.mine{
+  bottom:0;
+}
+
+.card.rotate-right{
+  -webkit-transform: rotate(90deg);
+  left:0;
+}
+
+.card.rotate-left{
+  -webkit-transform: rotate(-90deg);
+  right:0;
 }
