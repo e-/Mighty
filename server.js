@@ -41,13 +41,36 @@ requirejs([
     res.render('index');
   });
   
-  var Lobby = new model.Lobby(io);
+  var lobby = new model.Lobby(io),
+      players = [],
+      playerHash = {};
   io.on('connection', function(socket){
-    Lobby.onConnected(socket);
-    socket.on('lobby/chat/submit', function(msg){Lobby.onChatSubmitted(msg);});
+    var id = socket.id,
+        player = new model.Player(model.Player.getRandomName(), socket);
+    
+    players.push(player);
+    playerHash[id] = player;
+
+    io.emit('lobby/update', {
+      onlinePlayerCount: players.length
+    });
+    
+    lobby.onLoggedIn(player);
+
+    socket.on('lobby/chat/submit', function(msg){
+      lobby.onChatSubmitted(player, msg);
+    });
     
     var Game = new model.Game(socket);
     Game.run();
+
+    socket.on('disconnect', function(){
+      util.arrayRemove(players, player);
+      delete playerHash[player.id];
+      io.emit('lobby/update', {
+        onlinePlayerCount: players.length
+      });
+    });
   });
 
   server.listen(3000, function(){

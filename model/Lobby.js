@@ -5,8 +5,9 @@ define(['util', 'config'], function(util, config){
   }
   
   Lobby.prototype = {
-    onChatSubmitted: function(msg){
-      var escaped = util.escape(msg);
+    onChatSubmitted: function(player, msg){
+      if(msg.length == 0) return;
+      var escaped = util.escape(player.name + ' : ' + msg);
       
       this.chatHistory.push(escaped);
       
@@ -15,9 +16,10 @@ define(['util', 'config'], function(util, config){
 
       this.io.emit('lobby/chat/add', escaped);
     },
-    onConnected: function(socket){
-      this.chatHistory.forEach(function(h){
-        socket.emit('lobby/chat/add', h);
+    onLoggedIn: function(player){
+      var self = this;
+      player.socket.emit('login/success', {
+        messages: self.chatHistory
       });
     }
   };

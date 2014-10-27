@@ -68,3 +68,9 @@ body{
   -webkit-transform: rotate(-90deg);
   right:0;
 }
+
+
+#messages{
+  height:300px;
+  overflow-y:scroll;
+}

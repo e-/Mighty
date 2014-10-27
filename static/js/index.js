@@ -14,15 +14,30 @@ requirejs([
   'UI'
 ], function(socketio, $, model, UI){
   var socket = socketio();
+ 
+  socket.emit('login/try');
+  socket.on('login/success', function(json){
+    json.messages.forEach(function(msg){
+      $('#messages').append('<li>'+msg+'</li>');
+    });
+    $('#messages').scrollTop($('#messages').height());
+  });
   
+  socket.on('lobby/update', function(json){
+    $('#online-player-count').html(json.onlinePlayerCount);
+  });
+
   $('#chat').submit(function(){
-    socket.emit('lobby/chat/submit', $('#chat-value').val());
+    var value = $('#chat-value').val();
+    if(value.length == 0)return false;
+    socket.emit('lobby/chat/submit', value);
     $('#chat-value').val('');
     return false;
   });
 
   socket.on('lobby/chat/add', function(msg){
     $('#messages').append('<li>'+msg+'</li>');
+    $('#messages').scrollTop($('#messages').prop('scrollHeight'));
   });
   
   socket.on('game/start', function(handJSON){
