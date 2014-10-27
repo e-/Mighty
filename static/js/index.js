@@ -10,8 +10,9 @@ requirejs.config({
 requirejs([
   'socket.io', 
   'jquery',
-  'model'
-], function(socketio, $, model){
+  'model',
+  'UI'
+], function(socketio, $, model, UI){
   var socket = socketio();
   
   $('#chat').submit(function(){
@@ -30,5 +31,6 @@ requirejs([
     hand.cards.forEach(function(card){
       $('#hand').append(card.get$());
     });
+    UI.arrangeHand();
   });
 });

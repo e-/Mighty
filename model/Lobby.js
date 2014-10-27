@@ -11,7 +11,7 @@ define(['util', 'config'], function(util, config){
       this.chatHistory.push(escaped);
       
       if(this.chatHistory.length > config.lobby.chatHistoryMaximumNumber)
-        this.chatHistory = this.chatHistory.slice(this.chatHistory.length - config.lobby.chatHistory, this.chatHistory.length);
+        this.chatHistory = this.chatHistory.slice(this.chatHistory.length - config.lobby.chatHistoryMaximumNumber, this.chatHistory.length);
 
       this.io.emit('lobby/chat/add', escaped);
     },
