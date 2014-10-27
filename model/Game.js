@@ -8,7 +8,7 @@ define(['model/Deck'], function(Deck){
       var deck = new Deck();
       deck.shuffle();
 
-      this.players.emit('game', deck);
+      this.players.emit('game/start', deck.cards.slice(0, 10));
       // 공약
 
       // 주공 결정

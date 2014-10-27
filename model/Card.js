@@ -8,7 +8,7 @@ define(function(){
   Card.fromJSON = function(json){
     return new Card(json.suit, json.rank);
   }
-
+  
   Card.getBack$ = function(){
     return $('<img>').attr('src', '/images/cards/back.png').addClass('card');
   }

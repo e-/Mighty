@@ -24,10 +24,10 @@ requirejs([
     $('#messages').append('<li>'+msg+'</li>');
   });
   
-  socket.on('game', function(deckJSON){
-    var deck = model.Deck.fromJSON(deckJSON.cards);
-    $('#hand').append(model.Card.getBack$());
-    deck.cards.forEach(function(card){
+  socket.on('game/start', function(handJSON){
+    var hand = model.Hand.fromJSON(handJSON);
+
+    hand.cards.forEach(function(card){
       $('#hand').append(card.get$());
     });
   });
