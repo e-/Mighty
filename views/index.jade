@@ -1,8 +1,8 @@
 extend layout
 block content
+  div(class="container") 
+    ul#messages
+    form(id="chat")
+      input(id="chat-value" autocomplete="off" autofocus)
+      input(type="submit" value="Send")
   script(data-main='/js/index.js' src='/js/lib/require.js')
-  
-  ul#messages
-  form(id="chat")
-    input(id="chat-value" autocomplete="off" autofocus)
-    input(type="submit" value="Send")

@@ -2,7 +2,8 @@ var requirejs = require('requirejs');
 
 requirejs.config({
   path: {
-    util: './util'
+    util: './util',
+    config: './config'
   },
   packages: ['model'],
   nodeRequire: require
@@ -14,6 +15,7 @@ requirejs([
   'socket.io',
 
   'util',
+  'config',
 
   'model',
 ], function(
@@ -22,6 +24,7 @@ requirejs([
   socketio,
 
   util,
+  config,
 
   model
 ){
@@ -38,22 +41,13 @@ requirejs([
     res.render('index');
   });
   
-  var history = [];
+  var Lobby = new model.Lobby(io);
   io.on('connection', function(socket){
-    history.forEach(function(h){
-      socket.emit('lobby/chat/add', h);
-    });
-
-    socket.on('lobby/chat/submit', function(msg){
-      var escaped = util.escape(msg);
-      history.push(escaped);
-      history = history.slice(history.length - 10 < 0 ? 0 : history.length - 10, history.length);
-
-      io.emit('lobby/chat/add', escaped);
-    });
+    Lobby.onConnected(socket);
+    socket.on('lobby/chat/submit', function(msg){Lobby.onChatSubmitted(msg);});
   });
 
   server.listen(3000, function(){
-    console.log('The sever started at 3000');
+    console.log('The sever started at 3000.');
   });
 });
