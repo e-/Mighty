@@ -10,7 +10,11 @@ define(function(){
   }
   
   Card.getBack$ = function(){
-    return $('<img>').attr('src', '/images/cards/back.png').addClass('card');
+    return $('<div>')
+      .addClass('card')
+      .append(
+        $('<img>').attr('src', '/images/cards/back.png')
+      );
   }
 
   var rankToName = {
@@ -31,7 +35,11 @@ define(function(){
       return this.suit[0] + this.rankName;
     },
     get$: function(){
-      return $('<img>').attr('src', '/images/cards/' + this.toString() + '.png').addClass('card');
+      return $('<div>')
+        .addClass('card')
+        .append(
+          $('<img>').attr('src', '/images/cards/' + this.toString() + '.png')
+        );
     } 
   };
 

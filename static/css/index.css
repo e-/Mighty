@@ -6,8 +6,8 @@ body{
 }
 
 .card{
-  width:120px;
   border-radius: 5px;
+  width:120px;
   position:absolute;
   z-index:1;
   -webkit-user-drag: none;
@@ -15,6 +15,11 @@ body{
   -webkit-transform: translate(0px, 0px);
   
   transition : transform 0.1s linear, box-shadow 0.1s linear;
+
+}
+
+.card img{
+  width:120px;
 }
 
 .card.mine:hover{

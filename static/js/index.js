@@ -11,8 +11,10 @@ requirejs([
   'socket.io', 
   'jquery',
   'model',
-  'UI'
-], function(socketio, $, model, UI){
+  'UI',
+  'config',
+  'util'
+], function(socketio, $, model, UI, config, util){
   var socket = socketio();
  
   socket.emit('login/try');
@@ -44,7 +46,29 @@ requirejs([
     var hand = model.Hand.fromJSON(handJSON);
 
     hand.cards.forEach(function(card){
-      $('#hand').append(card.get$());
+      var card$ = card.get$();
+      $('#hand').append(card$);
+      card$.on('click', function(){
+        var
+            screenWidth = $(window).width(),
+            screenHeight = $(window).height();
+ 
+        var $this = $(this),
+            $dummy = $this.clone().appendTo($('body')),
+            offset = $this.offset()
+        $dummy
+          .removeClass('mine')
+          .css('left', offset.left)
+          .css('top', offset.top)
+          .animate({
+            left: screenWidth / 2 - config.UI.card.width / 2 ,
+            top: screenHeight / 2 - config.UI.card.height / 2
+          }, 250)
+        ;
+        $this.remove();
+        util.arrayRemove(hand.cards, card);
+        UI.arrangeHand(hand.cards.length);
+      });
     });
     UI.arrangeHand(hand.cards.length);
   });

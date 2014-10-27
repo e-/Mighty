@@ -5,9 +5,13 @@ define(function(){
     },
     UI: {
       card: {
-        visibleWidth: 40,
-        width: 120
+        width: 120,
+        height: 174
+      },
+      hand: {
+        width: 500
       }
+
     }
   };
 
