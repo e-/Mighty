@@ -45,6 +45,9 @@ requirejs([
   io.on('connection', function(socket){
     Lobby.onConnected(socket);
     socket.on('lobby/chat/submit', function(msg){Lobby.onChatSubmitted(msg);});
+    
+    var Game = new model.Game(socket);
+    Game.run();
   });
 
   server.listen(3000, function(){

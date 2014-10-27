@@ -5,6 +5,14 @@ define(function(){
     this.rankName = getRankName(rank);
   }
 
+  Card.fromJSON = function(json){
+    return new Card(json.suit, json.rank);
+  }
+
+  Card.getBack$ = function(){
+    return $('<img>').attr('src', '/images/cards/back.png').addClass('card');
+  }
+
   var rankToName = {
     0: '', // for joker
     1: 'A',
@@ -21,7 +29,10 @@ define(function(){
   Card.prototype = {
     toString: function(){
       return this.suit[0] + this.rankName;
-    }
+    },
+    get$: function(){
+      return $('<img>').attr('src', '/images/cards/' + this.toString() + '.png').addClass('card');
+    } 
   };
 
   return Card;

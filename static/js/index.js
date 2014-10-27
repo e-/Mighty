@@ -23,4 +23,12 @@ requirejs([
   socket.on('lobby/chat/add', function(msg){
     $('#messages').append('<li>'+msg+'</li>');
   });
+  
+  socket.on('game', function(deckJSON){
+    var deck = model.Deck.fromJSON(deckJSON.cards);
+    $('#hand').append(model.Card.getBack$());
+    deck.cards.forEach(function(card){
+      $('#hand').append(card.get$());
+    });
+  });
 });

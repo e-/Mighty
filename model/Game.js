@@ -1,9 +1,14 @@
-define(function(){
-  function Game(){
+define(['model/Deck'], function(Deck){
+  function Game(players){
+    this.players = players;
   }
 
   Game.prototype = {
     run: function(){
+      var deck = new Deck();
+      deck.shuffle();
+
+      this.players.emit('game', deck);
       // 공약
 
       // 주공 결정
