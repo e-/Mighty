@@ -24,6 +24,7 @@ body{
 
 .card img{
   width:120px;
+  -webkit-user-drag: none;
 }
 
 .card.mine:hover{
