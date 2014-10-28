@@ -1,4 +1,4 @@
-define(function(){
+define(['util'], function(util){
   var routes = {
     'game/start': 'onGameStart',
     'game/turn/mine': 'onMyTurn'
@@ -24,11 +24,12 @@ define(function(){
 
     },
     onMyTurn: function(){
-      console.log('handin!');
-      var handler = this.handlers['game/turn/handIn'];
+      var handler = this.handlers['game/turn/handIn'],
+          card = this.hand.cards[0];
+      this.hand.discard(card);
       setTimeout(function(){
-        handler();
-      }, 2000);
+        handler(card);
+      }, 1000);
     }
   };
 

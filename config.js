@@ -12,7 +12,7 @@ define(function(){
         width: 500
       },
       table: {
-        cardCenterRadius: 50
+        cardCenterRadius: 80
       }
     }
   };

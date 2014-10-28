@@ -54,8 +54,9 @@ define(['jquery', 'config', 'model'], function($, config, model){
         );
       }
     },
-    arrangeHand: function(i, length){
+    arrangeHand: function(i){
       var $hand = $('#hand' + i),
+          length = $hand.find('.card').length,
           range,
           offset,
           visibleRange,
@@ -79,7 +80,7 @@ define(['jquery', 'config', 'model'], function($, config, model){
         offset = (range - config.UI.hand.width) / 2;
       } else {
         visibleRange = config.UI.card.width;
-        offset = (screenWidth - config.UI.hand.width) / 2 + (config.UI.hand.width - config.UI.card.width * length) / 2;
+        offset = (range - config.UI.hand.width) / 2 + (config.UI.hand.width - config.UI.card.width * length) / 2;
       }
 
       if(i == 3) offset += $(window).width() / 2;
@@ -113,25 +114,28 @@ define(['jquery', 'config', 'model'], function($, config, model){
         case 2:
         case 3:
         case 4:
-          var ang = Math.PI / 4 * (4 - i);
+          var ang = Math.PI / 3 * (4 - i);
           return [
             center[0] + Math.cos(ang) * config.UI.table.cardCenterRadius,
-            center[1] + Math.sin(ang) * config.UI.table.cardCenterRadius
+            center[1] - Math.sin(ang) * config.UI.table.cardCenterRadius
           ];
       }
     },
-    moveCard: function($card, pos){
+    moveCard: function($card, src, dst){
       var
           $dummy = $card.clone().appendTo($('body')),
           offset = $card.offset();
+      if(src) {
+        $dummy.css('left', src[0] - config.UI.card.width / 2).css('top', src[1] - config.UI.card.height / 2);
+      } else {
+        $dummy.css('left', offset.left).css('top', offset.top);
+      }
 
       $dummy
         .removeClass('mine')
-        .css('left', offset.left)
-        .css('top', offset.top)
         .animate({
-          left: pos[0] - config.UI.card.width / 2,
-          top: pos[1] - config.UI.card.height / 2
+          left: dst[0] - config.UI.card.width / 2,
+          top: dst[1] - config.UI.card.height / 2
         }, 250)
       ;
     },
@@ -139,6 +143,7 @@ define(['jquery', 'config', 'model'], function($, config, model){
       var screenWidth = $(window).width(),
           screenHeight = $(window).height();
       switch(i) {
+        case 0: return [screenWidth / 2, screenHeight];
         case 1: return [0, screenHeight / 2];
         case 2: return [screenWidth / 4, 0];
         case 3: return [screenWidth * 3 / 4, 0];

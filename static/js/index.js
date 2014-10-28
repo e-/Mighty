@@ -44,37 +44,51 @@ requirejs([
     });
     UI.arrangeMyHand(hand.cards.length);
     UI.createOthersHand(hand.cards.length);
-    UI.arrangeHand(1, hand.cards.length);
-    UI.arrangeHand(2, hand.cards.length);
-    UI.arrangeHand(3, hand.cards.length);
-    UI.arrangeHand(4, hand.cards.length);
+    UI.arrangeHand(1)
+    UI.arrangeHand(2)
+    UI.arrangeHand(3)
+    UI.arrangeHand(4)
   });
 
   socket.on('game/turn/mine', function(){
     $('#hand0 .card').on('click', function(){
       var $this = $(this),
           card = $this.data('card');
-      UI.moveCard($this, UI.getTableCardCenter(0));
+      UI.moveCard($this, null, UI.getTableCardCenter(0));
       $this.remove();
       util.arrayRemove(hand.cards, card);
       UI.arrangeMyHand(hand.cards.length);
       
-      socket.emit('game/turn/handIn');
+      socket.emit('game/turn/handIn', card);
       $('#hand0 .card').off('click');
     });
   });
   
-  socket.on('game/turn/otherHandIn', function(globalPlayerNumber){
-    var $card = $('#hand' + globalPlayerNumber + ' .card').first(),
-        pos = UI.getPlayerCardCenter(globalPlayerNumber);
-
-    $card.css('left', pos[0]).css('top', pos[1]);
-
+  socket.on('game/turn/otherHandIn', function(globalPlayerNumber, cardJSON){
+    var card = model.Card.fromJSON(cardJSON),
+        $card = card.get$(),
+        pos = UI.getPlayerCardCenter(globalPlayerNumber),
+        $hand = $('#hand' + globalPlayerNumber);
     UI.moveCard(
       $card,
+      pos,
       UI.getTableCardCenter(globalPlayerNumber)
     );
-    console.log(globalPlayerNumber);
+    $hand.find('.card').last().remove();
+    UI.arrangeHand(globalPlayerNumber);
+  });
+
+  socket.on('game/turn/end', function(){
+    var $cards = $('body > .card');
+    setTimeout(function(){ // wait until last players' animation end
+      var pos = UI.getPlayerCardCenter(0);
+      $cards.stop().animate({
+        left: pos[0] - config.UI.card.width / 2,
+        top: pos[1]
+      }, function(){
+        $cards.remove();
+      });
+    }, 1000);
   });
 
   $('#chat').submit(function(){

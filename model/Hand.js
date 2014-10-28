@@ -1,11 +1,11 @@
-define(['model/Card'], function(Card){
-  function Hand(){
-    this.cards = [];
+define(['model/Card', 'util'], function(Card, util){
+  function Hand(cards){
+    this.cards = cards;
   }
 
   Hand.fromJSON = function(json){
     var cards = [], hand = new Hand();
-    json.forEach(function(cardJSON){
+    json.cards.forEach(function(cardJSON){
       cards.push(Card.fromJSON(cardJSON));
     });
 
@@ -21,6 +21,9 @@ define(['model/Card'], function(Card){
         if(a.suit == b.suit) return a.rank - b.rank;
         return a.suit.charCodeAt(0) - b.suit.charCodeAt(0);
       });
+    },
+    discard: function(card){
+      util.arrayRemove(this.cards, card);
     }
   };
   

@@ -1,15 +1,19 @@
 body{
   min-height:100%;
+  overflow:hidden;
 /*  background: url(/images/background.png) ;
   background-size: 100%;
   color:#eee;*/
+}
+
+.hand{
+  z-index:1;
 }
 
 .card{
   border-radius: 5px;
   width:120px;
   position:absolute;
-  z-index:1;
   -webkit-user-drag: none;
 
   -webkit-transform: translate(0px, 0px);

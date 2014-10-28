@@ -1,4 +1,4 @@
-define(['model/Deck'], function(Deck){
+define(['model/Deck', 'model/Hand'], function(Deck, Hand){
   function Game(players){
     this.players = players;
   }
@@ -13,14 +13,16 @@ define(['model/Deck'], function(Deck){
       deck.shuffle();
       
       this.players.forEach(function(player, i){
-        player.emit('game/start', i, deck.cards.slice(i * 10, (i + 1) * 10));
+        var hand = new Hand(deck.cards.slice(i * 10, (i + 1) * 10));
+        player.hand = hand;
+        player.emit('game/start', i, player.hand);
       });
 
       // 플레이어 자리 섞기
       
       var roundNumber = 0, playerNumber = 0, handInCount = 0;
       
-      function handIn(){
+      function handIn(card){
         var player = self.players[playerNumber],
             nextPlayer,
             nextPlayerNumber;
@@ -33,13 +35,17 @@ define(['model/Deck'], function(Deck){
         
         self.players.forEach(function(otherPlayer){
           if(player != otherPlayer) {
-            otherPlayer.emit('game/turn/otherHandIn', playerNumber);
+            otherPlayer.emit('game/turn/otherHandIn', playerNumber, card);
           }
         });
 
         if(handInCount == 5) {
           roundNumber++;
           handInCount = 0;
+          
+          self.players.forEach(function(player){
+            player.emit('game/turn/end');
+          });
         }
         playerNumber = nextPlayerNumber;
         nextPlayer.on('game/turn/handIn', handIn);
