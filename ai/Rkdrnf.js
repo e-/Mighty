@@ -11,7 +11,8 @@ define(function(){
   Rkdrnf.prototype = {
     emit: function(eventName){
       var args = Array.prototype.slice.call(arguments);
-      this[routes[eventName]].apply(this, args.slice(1, args.length));
+      var handler = this[routes[eventName]];
+      if(handler) handler.apply(this, args.slice(1, args.length));
     },
     on: function(eventName, handler){
       this.handlers[eventName] = handler;
@@ -24,7 +25,10 @@ define(function(){
     },
     onMyTurn: function(){
       console.log('handin!');
-      this.handlers['game/turn/handIn']();
+      var handler = this.handlers['game/turn/handIn'];
+      setTimeout(function(){
+        handler();
+      }, 2000);
     }
   };
 

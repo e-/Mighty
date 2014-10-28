@@ -103,17 +103,25 @@ define(['jquery', 'config', 'model'], function($, config, model){
     getTableCardCenter: function(i){
       var center = UI.getCenter();
       
-      if(i == 1){ // my card
-        return [
-          center[0],
-          center[1] + config.UI.table.cardCenterRadius
-        ];
+      switch(i){
+        case 0:
+          return [
+            center[0],
+            center[1] + config.UI.table.cardCenterRadius
+          ];
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+          var ang = Math.PI / 4 * (4 - i);
+          return [
+            center[0] + Math.cos(ang) * config.UI.table.cardCenterRadius,
+            center[1] + Math.sin(ang) * config.UI.table.cardCenterRadius
+          ];
       }
     },
     moveCard: function($card, pos){
       var
-          screenWidth = $(window).width(),
-          screenHeight = $(window).height(),
           $dummy = $card.clone().appendTo($('body')),
           offset = $card.offset();
 
@@ -126,6 +134,16 @@ define(['jquery', 'config', 'model'], function($, config, model){
           top: pos[1] - config.UI.card.height / 2
         }, 250)
       ;
+    },
+    getPlayerCardCenter: function(i){
+      var screenWidth = $(window).width(),
+          screenHeight = $(window).height();
+      switch(i) {
+        case 1: return [0, screenHeight / 2];
+        case 2: return [screenWidth / 4, 0];
+        case 3: return [screenWidth * 3 / 4, 0];
+        case 4: return [screenWidth, screenHeight / 2];
+      }
     }
   };
 

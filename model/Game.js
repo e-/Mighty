@@ -22,18 +22,26 @@ define(['model/Deck'], function(Deck){
       
       function handIn(){
         var player = self.players[playerNumber],
-            nextPlayer;
+            nextPlayer,
+            nextPlayerNumber;
 
-        playerNumber = (playerNumber + 1) % 5;
-        nextPlayer = self.players[playerNumber];
+        nextPlayerNumber = (playerNumber + 1) % 5;
+        nextPlayer = self.players[nextPlayerNumber];
         
         player.off('game/turn/handIn');
         handInCount++;
+        
+        self.players.forEach(function(otherPlayer){
+          if(player != otherPlayer) {
+            otherPlayer.emit('game/turn/otherHandIn', playerNumber);
+          }
+        });
 
         if(handInCount == 5) {
           roundNumber++;
           handInCount = 0;
         }
+        playerNumber = nextPlayerNumber;
         nextPlayer.on('game/turn/handIn', handIn);
         nextPlayer.emit('game/turn/mine');
       }

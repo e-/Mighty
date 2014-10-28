@@ -54,7 +54,7 @@ requirejs([
     $('#hand0 .card').on('click', function(){
       var $this = $(this),
           card = $this.data('card');
-      UI.moveCard($this, UI.getTableCardCenter(1));
+      UI.moveCard($this, UI.getTableCardCenter(0));
       $this.remove();
       util.arrayRemove(hand.cards, card);
       UI.arrangeMyHand(hand.cards.length);
@@ -62,6 +62,19 @@ requirejs([
       socket.emit('game/turn/handIn');
       $('#hand0 .card').off('click');
     });
+  });
+  
+  socket.on('game/turn/otherHandIn', function(globalPlayerNumber){
+    var $card = $('#hand' + globalPlayerNumber + ' .card').first(),
+        pos = UI.getPlayerCardCenter(globalPlayerNumber);
+
+    $card.css('left', pos[0]).css('top', pos[1]);
+
+    UI.moveCard(
+      $card,
+      UI.getTableCardCenter(globalPlayerNumber)
+    );
+    console.log(globalPlayerNumber);
   });
 
   $('#chat').submit(function(){
