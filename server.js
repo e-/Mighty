@@ -3,9 +3,10 @@ var requirejs = require('requirejs');
 requirejs.config({
   path: {
     util: './util',
-    config: './config'
+    config: './config',
+    ai: './ai'
   },
-  packages: ['model'],
+  packages: ['model', 'ai'],
   nodeRequire: require
 });
 
@@ -18,6 +19,7 @@ requirejs([
   'config',
 
   'model',
+  'ai'
 ], function(
   express,
   http,
@@ -26,7 +28,8 @@ requirejs([
   util,
   config,
 
-  model
+  model,
+  ai
 ){
   var 
       app = express(),
@@ -61,7 +64,13 @@ requirejs([
       lobby.onChatSubmitted(player, msg);
     });
     
-    var Game = new model.Game(socket);
+    var Game = new model.Game([
+      player, 
+      new ai.Rkdrnf(),
+      new ai.Rkdrnf(),
+      new ai.Rkdrnf(),
+      new ai.Rkdrnf()
+    ]);
     Game.run();
 
     socket.on('disconnect', function(){

@@ -36,6 +36,7 @@ define(function(){
     },
     get$: function(){
       return $('<div>')
+        .data('card', this)
         .addClass('card')
         .append(
           $('<img>').attr('src', '/images/cards/' + this.toString() + '.png')

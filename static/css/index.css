@@ -31,15 +31,21 @@ body{
   -webkit-transform: translate(0px, -30px);
 }
 
-#hand{
+#hand0{
   position:fixed;
   bottom:0;
 }
 
-#hand2{
+#hand1{
   position:fixed;
   left:0;
   top:0;
+}
+
+#hand2{
+  position:fixed;
+  top:-20px;
+  left:0;
 }
 
 #hand3{
@@ -50,14 +56,8 @@ body{
 
 #hand4{
   position:fixed;
-  top:-20px;
-  left:0;
-}
-
-#hand5{
-  position:fixed;
   right:0;
-  bottom:0;
+  top:0;
 }
 
 .card.mine{

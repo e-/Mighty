@@ -5,10 +5,43 @@ define(['model/Deck'], function(Deck){
 
   Game.prototype = {
     run: function(){
-      var deck = new Deck();
-      deck.shuffle();
+      // 덱 만들기 
+      var self = this,
+          deck = new Deck();
 
-      this.players.emit('game/start', deck.cards.slice(0, 10));
+      // 딜미스 없을 때까지 셔플 
+      deck.shuffle();
+      
+      this.players.forEach(function(player, i){
+        player.emit('game/start', i, deck.cards.slice(i * 10, (i + 1) * 10));
+      });
+
+      // 플레이어 자리 섞기
+      
+      var roundNumber = 0, playerNumber = 0, handInCount = 0;
+      
+      function handIn(){
+        var player = self.players[playerNumber],
+            nextPlayer;
+
+        playerNumber = (playerNumber + 1) % 5;
+        nextPlayer = self.players[playerNumber];
+        
+        player.off('game/turn/handIn');
+        handInCount++;
+
+        if(handInCount == 5) {
+          roundNumber++;
+          handInCount = 0;
+        }
+        nextPlayer.on('game/turn/handIn', handIn);
+        nextPlayer.emit('game/turn/mine');
+      }
+
+      this.players[playerNumber].on('game/turn/handIn', handIn);  
+      this.players[playerNumber].emit('game/turn/mine');
+
+
       // 공약
 
       // 주공 결정

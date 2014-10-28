@@ -10,8 +10,10 @@ define(function(){
       },
       hand: {
         width: 500
+      },
+      table: {
+        cardCenterRadius: 50
       }
-
     }
   };
 

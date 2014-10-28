@@ -16,7 +16,8 @@ requirejs([
   'util'
 ], function(socketio, $, model, UI, config, util){
   var socket = socketio();
- 
+  var hand;
+
   socket.emit('login/try');
   socket.on('login/success', function(json){
     json.messages.forEach(function(msg){
@@ -29,47 +30,45 @@ requirejs([
     $('#online-player-count').html(json.onlinePlayerCount);
   });
 
+  socket.on('lobby/chat/add', function(msg){
+    $('#messages').append('<li>'+msg+'</li>');
+    $('#messages').scrollTop($('#messages').prop('scrollHeight'));
+  });
+  
+  socket.on('game/start', function(myId, handJSON){
+    hand = model.Hand.fromJSON(handJSON);
+
+    hand.cards.forEach(function(card){
+      var card$ = card.get$();
+      $('#hand0').append(card$);
+    });
+    UI.arrangeMyHand(hand.cards.length);
+    UI.createOthersHand(hand.cards.length);
+    UI.arrangeHand(1, hand.cards.length);
+    UI.arrangeHand(2, hand.cards.length);
+    UI.arrangeHand(3, hand.cards.length);
+    UI.arrangeHand(4, hand.cards.length);
+  });
+
+  socket.on('game/turn/mine', function(){
+    $('#hand0 .card').on('click', function(){
+      var $this = $(this),
+          card = $this.data('card');
+      UI.moveCard($this, UI.getTableCardCenter(1));
+      $this.remove();
+      util.arrayRemove(hand.cards, card);
+      UI.arrangeMyHand(hand.cards.length);
+      
+      socket.emit('game/turn/handIn');
+      $('#hand0 .card').off('click');
+    });
+  });
+
   $('#chat').submit(function(){
     var value = $('#chat-value').val();
     if(value.length == 0)return false;
     socket.emit('lobby/chat/submit', value);
     $('#chat-value').val('');
     return false;
-  });
-
-  socket.on('lobby/chat/add', function(msg){
-    $('#messages').append('<li>'+msg+'</li>');
-    $('#messages').scrollTop($('#messages').prop('scrollHeight'));
-  });
-  
-  socket.on('game/start', function(handJSON){
-    var hand = model.Hand.fromJSON(handJSON);
-
-    hand.cards.forEach(function(card){
-      var card$ = card.get$();
-      $('#hand').append(card$);
-      card$.on('click', function(){
-        var
-            screenWidth = $(window).width(),
-            screenHeight = $(window).height();
- 
-        var $this = $(this),
-            $dummy = $this.clone().appendTo($('body')),
-            offset = $this.offset()
-        $dummy
-          .removeClass('mine')
-          .css('left', offset.left)
-          .css('top', offset.top)
-          .animate({
-            left: screenWidth / 2 - config.UI.card.width / 2 ,
-            top: screenHeight / 2 - config.UI.card.height / 2
-          }, 250)
-        ;
-        $this.remove();
-        util.arrayRemove(hand.cards, card);
-        UI.arrangeHand(hand.cards.length);
-      });
-    });
-    UI.arrangeHand(hand.cards.length);
   });
 });

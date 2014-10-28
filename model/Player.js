@@ -9,6 +9,15 @@ define(function(){
   };
 
   Player.prototype = {
+    emit: function(){
+      this.socket.emit.apply(this.socket, arguments);
+    },
+    on: function(eventName, handler) {
+      this.socket.on(eventName, handler);
+    }, 
+    off: function(eventName){
+      this.socket.removeAllListeners(eventName);
+    }
   };
 
   return Player;
