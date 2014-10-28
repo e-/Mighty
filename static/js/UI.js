@@ -185,7 +185,8 @@ define(['jquery', 'config', 'model'], function($, config, model){
       $wrapper.data('timer', timer);
     },
     removeAllCards: function(){
-      $('#hand0, #hand1, #hand2, #hand3, #hand4 .card').remove();
+      $('#hand0, #hand1, #hand2, #hand3, #hand4').find('.card').remove();
+      $('body > .card').remove();
     }
   };
 

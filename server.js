@@ -73,8 +73,9 @@ requirejs([
       if(player.room)
         player.room.onChatSubmitted(player, msg);
     });
-    
-    testRoom.join(player);
+   
+    if(!testRoom.game)
+      testRoom.join(player);
     
     socket.on('game/start/try', function(){
       testRoom.onGameStartTry(player);
