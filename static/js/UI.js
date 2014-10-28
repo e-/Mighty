@@ -183,6 +183,9 @@ define(['jquery', 'config', 'model'], function($, config, model){
       }, config.UI.room.chatDuration);
 
       $wrapper.data('timer', timer);
+    },
+    removeAllCards: function(){
+      $('#hand0, #hand1, #hand2, #hand3, #hand4 .card').remove();
     }
   };
 

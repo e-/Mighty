@@ -6,6 +6,9 @@ define(function(){
     room: {
       playerMaximumNumber: 5
     },
+    game: {
+      playerMaximumNumber: 5
+    },
     UI: {
       card: {
         width: 120,

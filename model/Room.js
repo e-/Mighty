@@ -1,4 +1,4 @@
-define(['util', 'config'], function(util, config){
+define(['util', 'config', 'ai', 'model/Game'], function(util, config, ai, Game){
   function Room(title, io){
     this.id = util.getUID();
     this.title = title || 'New room';
@@ -27,6 +27,11 @@ define(['util', 'config'], function(util, config){
       this.io.to(this.id).emit('room/update', this.players);
     },
     leave: function(player){
+      if(this.game) {
+        this.game.stop();
+        delete this.game;
+      }
+      
       util.arrayRemove(this.players, player);
       player
         .leave(this)
@@ -42,6 +47,19 @@ define(['util', 'config'], function(util, config){
       
       this.io.to(this.id).emit('room/chat/add', this.players.indexOf(player), escaped);
     },
+    onGameStartTry: function(player){
+      if(this.players.indexOf(player) != 0)
+        return;
+      if(this.game)
+        return;
+      
+      var gamePlayers = this.players.slice(0);
+      while(gamePlayers.length < config.game.playerMaximumNumber) gamePlayers.push(new ai.Rkdrnf());
+      
+      var game = new Game(gamePlayers);
+      this.game = game;
+      game.run();
+    }
   };
 
   return Room;

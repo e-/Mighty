@@ -1,10 +1,19 @@
 define(['model/Deck', 'model/Hand'], function(Deck, Hand){
   function Game(players){
     this.players = players;
+    this.isPlaying = false;
   }
 
   Game.prototype = {
+    stop: function(){
+      this.isPlaying = false;
+      this.players.forEach(function(player){
+        player.emit('game/stopped');
+      });
+    },
     run: function(){
+      this.isPlaying = true;
+
       // 덱 만들기 
       var self = this,
           deck = new Deck();
@@ -15,7 +24,7 @@ define(['model/Deck', 'model/Hand'], function(Deck, Hand){
       this.players.forEach(function(player, i){
         var hand = new Hand(deck.cards.slice(i * 10, (i + 1) * 10));
         player.hand = hand;
-        player.emit('game/start', i, player.hand);
+        player.emit('game/started', i, player.hand);
       });
 
       // 플레이어 자리 섞기
@@ -32,7 +41,11 @@ define(['model/Deck', 'model/Hand'], function(Deck, Hand){
         
         player.off('game/turn/handIn');
         handInCount++;
-        
+
+        if(!self.isPlaying) { //stopped
+          return;
+        }
+       
         self.players.forEach(function(otherPlayer){
           if(player != otherPlayer) {
             otherPlayer.emit('game/turn/otherHandIn', playerNumber, card);
@@ -44,7 +57,7 @@ define(['model/Deck', 'model/Hand'], function(Deck, Hand){
           handInCount = 0;
           
           self.players.forEach(function(player){
-            player.emit('game/turn/end');
+            player.emit('game/turn/end', 0);
           });
         }
         playerNumber = nextPlayerNumber;

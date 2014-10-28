@@ -253,3 +253,16 @@ input[type=number]:hover::-webkit-outer-spin-button {
   margin-top:0px;
   margin-bottom:5px;
 }
+
+#start {
+  position:absolute;
+  width:300px;
+  height:100px;
+  left: 50%;
+  top: 50%;
+  margin-left:-150px;
+  margin-top:-50px;
+  font-size:50px;
+  display:none;
+}
+

@@ -2,9 +2,10 @@ requirejs.config({
   baseUrl: 'js',
   paths: {
     'socket.io': '../socket.io/socket.io',
-    'jquery': 'lib/jquery-2.1.1.min'
+    'jquery': 'lib/jquery-2.1.1.min',
+    'ai': './ai'
   },
-  packages: ['model']
+  packages: ['model', 'ai']
 });
 
 requirejs([
@@ -22,7 +23,11 @@ requirejs([
   $('#master-score').keypress(function(e){
     return false;
   });
-  
+
+  $('#start').click(function(){
+    socket.emit('game/start/try');
+  });
+
   function onTextEntered(text) {
     if(player.room) {
       socket.emit('room/chat/submit', text);
@@ -78,13 +83,19 @@ requirejs([
 
       $('#chat' + playerNumber).find('h2').html(p.name);
     });
+
+    if(myPlayerNumber == 0) 
+      $('#start').show();
+    else
+      $('#start').hide();
   });
 
   socket.on('room/leave', function(){
     delete player.room;
   });
 
-  socket.on('game/start', function(myId, handJSON){
+  socket.on('game/started', function(myId, handJSON){
+    $('#start').hide();
     player.hand = model.Hand.fromJSON(handJSON);
     player.hand.cards.forEach(function(card){
       var card$ = card.get$();
@@ -92,10 +103,15 @@ requirejs([
     });
     UI.arrangeMyHand(player.hand.cards.length);
     UI.createOthersHand(player.hand.cards.length);
-    UI.arrangeHand(1)
-    UI.arrangeHand(2)
-    UI.arrangeHand(3)
-    UI.arrangeHand(4)
+    UI.arrangeHand(1);
+    UI.arrangeHand(2);
+    UI.arrangeHand(3);
+    UI.arrangeHand(4);
+  });
+  
+  socket.on('game/stopped', function(){
+    delete player.hand;
+    UI.removeAllCards();
   });
 
   socket.on('game/turn/mine', function(){
@@ -104,8 +120,8 @@ requirejs([
           card = $this.data('card');
       UI.moveCard($this, null, UI.getTableCardCenter(0));
       $this.remove();
-      util.arrayRemove(hand.cards, card);
-      UI.arrangeMyHand(hand.cards.length);
+      util.arrayRemove(player.hand.cards, card);
+      UI.arrangeMyHand(player.hand.cards.length);
       
       socket.emit('game/turn/handIn', card);
       $('#hand0 .card').off('click');
@@ -115,24 +131,26 @@ requirejs([
   socket.on('game/turn/otherHandIn', function(globalPlayerNumber, cardJSON){
     var card = model.Card.fromJSON(cardJSON),
         $card = card.get$(),
-        pos = UI.getPlayerCardCenter(globalPlayerNumber),
-        $hand = $('#hand' + globalPlayerNumber);
+        playerNumber = util.getRelativePlayerNumber(globalPlayerNumber, player.globalPlayerNumber),
+        pos = UI.getPlayerCardCenter(playerNumber),
+        $hand = $('#hand' + playerNumber);
     UI.moveCard(
       $card,
       pos,
-      UI.getTableCardCenter(globalPlayerNumber)
+      UI.getTableCardCenter(playerNumber)
     );
     $hand.find('.card').last().remove();
-    UI.arrangeHand(globalPlayerNumber);
+    UI.arrangeHand(playerNumber);
   });
 
-  socket.on('game/turn/end', function(){
-    var $cards = $('body > .card');
+  socket.on('game/turn/end', function(globalWinnerNumber){
+    var playerNumber = util.getRelativePlayerNumber(globalWinnerNumber, player.globalPlayerNumber),
+        $cards = $('body > .card');
     setTimeout(function(){ // wait until last players' animation end
-      var pos = UI.getPlayerCardCenter(0);
+      var pos = UI.getPlayerCardCenter(playerNumber);
       $cards.stop().animate({
         left: pos[0] - config.UI.card.width / 2,
-        top: pos[1]
+        top: pos[1] - config.UI.card.height / 2
       }, function(){
         $cards.remove();
       });

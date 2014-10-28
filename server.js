@@ -75,15 +75,10 @@ requirejs([
     });
     
     testRoom.join(player);
-
-    var Game = new model.Game([
-      player, 
-      new ai.Rkdrnf(),
-      new ai.Rkdrnf(),
-      new ai.Rkdrnf(),
-      new ai.Rkdrnf()
-    ]);
-    Game.run();
+    
+    socket.on('game/start/try', function(){
+      testRoom.onGameStartTry(player);
+    });
 
     socket.on('disconnect', function(){
       if(player.room)
