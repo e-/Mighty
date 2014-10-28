@@ -17,6 +17,11 @@ requirejs([
 ], function(socketio, $, model, UI, config, util){
   var socket = socketio();
   var hand;
+  
+  $('#master-score').keydown(function(e){
+    e.preventDefault();
+    return false;
+  });
 
   socket.emit('login/try');
   socket.on('login/success', function(json){

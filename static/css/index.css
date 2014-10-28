@@ -92,7 +92,7 @@ body{
   position:absolute;
   left:50%;
   margin-left:-250px;
-  bottom:200px;
+  bottom:230px;
   background:white;
 }
 
@@ -126,6 +126,7 @@ body{
 
 .suit.active:hover{
   box-shadow:none;
+  cursor:default;
 }
 
 .suit img{
@@ -150,15 +151,15 @@ body{
   cursor:pointer;
 }
 
-#score-wrapper{
+#master-score-wrapper{
   margin-top:20px;
 }
 
-#run-wrapper{
+#master-run-wrapper{
   margin-top:20px;
 }
 
-#run-wrapper button{
+#master-run-wrapper button{
   width:45%;
   margin:2.5%;
   font-size: 25px;
