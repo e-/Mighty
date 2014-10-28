@@ -84,3 +84,98 @@ body{
   height:300px;
   overflow-y:scroll;
 }
+
+#master-suit-box{
+  width:500px;
+  text-align:center;
+  z-index:3;
+  position:absolute;
+  left:50%;
+  margin-left:-250px;
+  bottom:200px;
+  background:white;
+}
+
+#master-suit-box .suit{
+  border:none;
+  background:none;
+  padding:0;
+  outline:none;
+  margin:0px 5px;
+  border-radius:5px;
+  width:69px;
+  height:69px;
+  border:none;
+}
+
+.suit:hover{
+  box-shadow:0px 0px 10px 7px rgba(0, 0, 0, 0.2);
+}
+
+.suit .overlay{
+  display:inline-block;
+  position:absolute;
+  width:70px;
+  height:70px;
+  border-radius:5px;
+}
+
+.suit.active .overlay{
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.3) inset;
+}
+
+.suit.active:hover{
+  box-shadow:none;
+}
+
+.suit img{
+  -webkit-user-drag:none;
+  margin:5px;
+}
+
+#master-suit-box input{
+  font-size:90px;;
+  text-align:center;
+  border:none;
+  outline:none;
+  width:170px;
+}
+
+#master-suit-box input[type=number]::-webkit-inner-spin-button, 
+#master-suit-box input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
+  width:20px;
+  padding:0px 15px;
+  font-size:30px;
+  cursor:pointer;
+}
+
+#score-wrapper{
+  margin-top:20px;
+}
+
+#run-wrapper{
+  margin-top:20px;
+}
+
+#run-wrapper button{
+  width:45%;
+  margin:2.5%;
+  font-size: 25px;
+}
+
+.box{
+  padding:20px;
+  box-shadow:
+    0px 20px 30px 10px rgba(0,0,0, 0.12),
+    0px 10px 30px 5px rgba(0,0,0, 0.3)
+    ;
+  border-radius:4px;
+  border:1px solid #aaa;
+  border-top:1px solid #ddd;
+}
+
+input[type=number]:hover::-webkit-inner-spin-button, 
+input[type=number]:hover::-webkit-outer-spin-button {
+  opacity: 1;
+}
