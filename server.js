@@ -82,7 +82,7 @@ requirejs([
     });
   });
 
-  server.listen(3000, function(){
-    console.log('The sever started at 3000.');
+  server.listen(config.port, function(){
+    console.log('The sever started at ' + config.port + '.');
   });
 });

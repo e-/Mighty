@@ -14,6 +14,9 @@ define(function(){
       table: {
         cardCenterRadius: 80
       }
+    },
+    server: {
+      port: 3000
     }
   };
 
