@@ -16,6 +16,9 @@ define(function(){
       },
       table: {
         cardCenterRadius: 80
+      },
+      room: {
+        chatDuration: 3000
       }
     },
     server: {

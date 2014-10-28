@@ -42,6 +42,7 @@ requirejs([
   
   socket.on('login/success', function(json){
     player = model.Player.fromJSON(json.playerJSON);
+    $('#chat0 h2').html(player.name);
     json.messages.forEach(function(msg){
       $('#messages').append('<li>'+msg+'</li>');
     });
@@ -59,15 +60,26 @@ requirejs([
   
   socket.on('room/chat/add', function(globalPlayerNumber, msg){
     var relativePlayerNumber = util.getRelativePlayerNumber(globalPlayerNumber, player.globalPlayerNumber);
-
-    console.log(relativePlayerNumber, msg);
+    UI.addRoomChat(relativePlayerNumber, msg);
   });
 
-  socket.on('room/join/success', function(roomJSON, globalPlayerNumber){
+  socket.on('room/join/success', function(roomJSON){
     player.room = model.Room.fromJSON(roomJSON);
-    player.globalPlayerNumber = globalPlayerNumber;
   });
-  
+ 
+  socket.on('room/update', function(players){
+    var myPlayerNumber;
+    players.forEach(function(p, i){
+      if(p.id == player.id) myPlayerNumber = i;
+    });
+    player.globalPlayerNumber = myPlayerNumber;
+    players.forEach(function(p, i){
+      var playerNumber = util.getRelativePlayerNumber(i, myPlayerNumber);
+
+      $('#chat' + playerNumber).find('h2').html(p.name);
+    });
+  });
+
   socket.on('room/leave', function(){
     delete player.room;
   });

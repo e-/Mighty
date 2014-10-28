@@ -164,6 +164,25 @@ define(['jquery', 'config', 'model'], function($, config, model){
       } else {
         $chat.show().focus();
       }
+    },
+    addRoomChat: function(playerNumber, msg){
+      var $wrapper = $('#chat' + playerNumber),
+          $p = $('<p>').html(msg),
+          timer = $wrapper.data('timer')
+          ;
+
+      $wrapper
+        .show()
+        .append($p);
+      if(timer) clearTimeout(timer);
+      if($wrapper.find('p').length > 3)
+        $wrapper.find('p').first().remove();
+      
+      timer = setTimeout(function(){
+        $wrapper.hide();
+      }, config.UI.room.chatDuration);
+
+      $wrapper.data('timer', timer);
     }
   };
 

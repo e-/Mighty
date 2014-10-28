@@ -18,16 +18,20 @@ define(['util', 'config'], function(util, config){
         player.emit('room/join/failed');
         return;
       }
+      
       this.players.push(player);
       player
         .join(this)
-        .emit('room/join/success', this.toJSON(), this.players.length - 1);
+        .emit('room/join/success', this.toJSON());
+      
+      this.io.to(this.id).emit('room/update', this.players);
     },
     leave: function(player){
       util.arrayRemove(this.players, player);
       player
         .leave(this)
         .emit('room/leave');
+      this.io.to(this.id).emit('room/update', this.players);
     },
     toJSON: function(){
       return { id : this.id, title: this.title };

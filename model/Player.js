@@ -1,6 +1,7 @@
-define(function(){
+define(['util'], function(util){
   function Player(name, socket){
     this.name = name;
+    this.id = util.getUID();
     this.socket = socket;
   }
   
@@ -10,6 +11,7 @@ define(function(){
   
   Player.fromJSON = function(json){
     var player = new Player(json.name);
+    player.id = json.id;
     return player;
   };
 
@@ -37,7 +39,7 @@ define(function(){
       return this;
     },
     toJSON: function(){
-      return {name: this.name};
+      return {name: this.name, id: this.id};
     }
   };
 

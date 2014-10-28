@@ -1,4 +1,4 @@
-define(function(){
+define(['config'], function(config){
   var util = {};
 
   // HTML escape function
