@@ -2,11 +2,16 @@ define(['util'], function(util){
   var routes = {
     'game/start': 'onGameStart',
     'game/turn/mine': 'onMyTurn'
-  }
+  };
 
   function Rkdrnf(){
     this.handlers = {};
   }
+
+  Rkdrnf.info = {
+    name: 'rkdrnf.js',
+    description: '안준형군의 마이티 플레이를 충실하고 완전하게 구현한 인공지능 플레이업니다. 손에 있는 패 중 하나를 랜덤으로 냅니다.'
+  };
 
   Rkdrnf.prototype = {
     emit: function(eventName){
