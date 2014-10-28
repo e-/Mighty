@@ -46,7 +46,11 @@ requirejs([
   
   var lobby = new model.Lobby(io),
       players = [],
-      playerHash = {};
+      playerHash = {}, 
+      rooms = [];
+
+  var testRoom = new model.Room(null, io);
+  
   io.on('connection', function(socket){
     var id = socket.id,
         player = new model.Player(model.Player.getRandomName(), socket);
@@ -61,9 +65,17 @@ requirejs([
     lobby.onLoggedIn(player);
 
     socket.on('lobby/chat/submit', function(msg){
-      lobby.onChatSubmitted(player, msg);
+      if(!player.room)
+        lobby.onChatSubmitted(player, msg);
     });
     
+    socket.on('room/chat/submit', function(msg){
+      if(player.room)
+        player.room.onChatSubmitted(player, msg);
+    });
+    
+    testRoom.join(player);
+
     var Game = new model.Game([
       player, 
       new ai.Rkdrnf(),
@@ -74,6 +86,8 @@ requirejs([
     Game.run();
 
     socket.on('disconnect', function(){
+      if(player.room)
+        player.room.leave(player);
       util.arrayRemove(players, player);
       delete playerHash[player.id];
       io.emit('lobby/update', {
@@ -82,7 +96,7 @@ requirejs([
     });
   });
 
-  server.listen(config.port, function(){
-    console.log('The sever started at ' + config.port + '.');
+  server.listen(config.server.port, function(){
+    console.log('The sever started at ' + config.server.port + '.');
   });
 });

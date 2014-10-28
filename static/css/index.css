@@ -180,3 +180,72 @@ input[type=number]:hover::-webkit-inner-spin-button,
 input[type=number]:hover::-webkit-outer-spin-button {
   opacity: 1;
 }
+
+#chat{
+  display:none;
+  position:fixed;
+  width:600px;
+  background:rgba(255, 255, 255, 0.9);
+  margin-left:-300px;
+  left:50%;
+  bottom:60px;
+  z-index:5;
+  font-size:20px;
+  outline: 0;
+  border:none;
+  padding:10px;
+}
+
+.chat-log{
+  position:fixed;
+  width:300px;
+  height:120px;
+  background:rgba(255, 255, 255, 0.9);
+  z-index:4;
+  font-size:16px;
+  outline: 0;
+  border:none;
+  padding:10px;
+}
+
+#chat0 {
+  left:50%;
+  bottom:130px;
+  margin-left:-150px;
+}
+
+#chat1 {
+  left:30px;
+  top:50%;
+  margin-top:0
+}
+
+#chat2 {
+  left:25%;
+  top:30px;
+  margin-left:-150px;
+}
+
+#chat3 {
+  left:75%;
+  top:30px;
+  margin-left:-150px;
+}
+
+#chat4 {
+  right:30px;
+  top:50%;
+  margin-top:0;
+}
+
+.chat-log p{
+  margin-bottom:3px;
+  margin-left:10px;
+  overflow:hidden;
+}
+
+.chat-log h2{
+  font-size:20px;
+  margin-top:0px;
+  margin-bottom:5px;
+}

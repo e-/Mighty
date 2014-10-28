@@ -5,8 +5,9 @@ define([
   'model/Game',
   'model/Player',
   'model/Lobby',
-  'model/Hand'
-], function(Suit, Card, Deck, Game, Player, Lobby, Hand){
+  'model/Hand',
+  'model/Room'
+], function(Suit, Card, Deck, Game, Player, Lobby, Hand, Room){
   return {
     Suit: Suit,
     Card: Card,
@@ -14,6 +15,7 @@ define([
     Game: Game,
     Player: Player,
     Lobby: Lobby,
-    Hand: Hand
+    Hand: Hand,
+    Room: Room
   };
 });

@@ -3,6 +3,9 @@ define(function(){
     lobby: {
       chatHistoryMaximumNumber: 20
     },
+    room: {
+      playerMaximumNumber: 5
+    },
     UI: {
       card: {
         width: 120,

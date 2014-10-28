@@ -15,16 +15,33 @@ requirejs([
   'config',
   'util'
 ], function(socketio, $, model, UI, config, util){
-  var socket = socketio();
-  var hand;
+  var 
+      socket = socketio(),
+      player;
   
-  $('#master-score').keydown(function(e){
-    e.preventDefault();
+  $('#master-score').keypress(function(e){
     return false;
+  });
+  
+  function onTextEntered(text) {
+    if(player.room) {
+      socket.emit('room/chat/submit', text);
+    } else {
+      socket.emit('lobby/chat/submit', text);
+    }
+  }
+
+  $(window).keypress(function(e){
+    if(e.keyCode == 13) {
+      UI.onEnterKeyPressed(onTextEntered);
+      return false;
+    }
   });
 
   socket.emit('login/try');
+  
   socket.on('login/success', function(json){
+    player = model.Player.fromJSON(json.playerJSON);
     json.messages.forEach(function(msg){
       $('#messages').append('<li>'+msg+'</li>');
     });
@@ -40,15 +57,29 @@ requirejs([
     $('#messages').scrollTop($('#messages').prop('scrollHeight'));
   });
   
-  socket.on('game/start', function(myId, handJSON){
-    hand = model.Hand.fromJSON(handJSON);
+  socket.on('room/chat/add', function(globalPlayerNumber, msg){
+    var relativePlayerNumber = util.getRelativePlayerNumber(globalPlayerNumber, player.globalPlayerNumber);
 
-    hand.cards.forEach(function(card){
+    console.log(relativePlayerNumber, msg);
+  });
+
+  socket.on('room/join/success', function(roomJSON, globalPlayerNumber){
+    player.room = model.Room.fromJSON(roomJSON);
+    player.globalPlayerNumber = globalPlayerNumber;
+  });
+  
+  socket.on('room/leave', function(){
+    delete player.room;
+  });
+
+  socket.on('game/start', function(myId, handJSON){
+    player.hand = model.Hand.fromJSON(handJSON);
+    player.hand.cards.forEach(function(card){
       var card$ = card.get$();
       $('#hand0').append(card$);
     });
-    UI.arrangeMyHand(hand.cards.length);
-    UI.createOthersHand(hand.cards.length);
+    UI.arrangeMyHand(player.hand.cards.length);
+    UI.createOthersHand(player.hand.cards.length);
     UI.arrangeHand(1)
     UI.arrangeHand(2)
     UI.arrangeHand(3)
@@ -94,13 +125,5 @@ requirejs([
         $cards.remove();
       });
     }, 1000);
-  });
-
-  $('#chat').submit(function(){
-    var value = $('#chat-value').val();
-    if(value.length == 0)return false;
-    socket.emit('lobby/chat/submit', value);
-    $('#chat-value').val('');
-    return false;
   });
 });

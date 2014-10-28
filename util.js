@@ -29,5 +29,21 @@ define(function(){
     return arr;
   };
   
+  util.getUID = function(){
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+               .toString(16)
+               .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+           s4() + '-' + s4() + s4() + s4();
+  }
+  
+  util.getRelativePlayerNumber = function(playerNumber, myPlayerNumber) {
+    var pn = playerNumber - myPlayerNumber;
+    if(pn < 0) pn += config.room.playerMaximumNumber;
+    return pn;
+  };
+
   return util;
 });

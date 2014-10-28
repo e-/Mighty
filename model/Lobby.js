@@ -19,6 +19,7 @@ define(['util', 'config'], function(util, config){
     onLoggedIn: function(player){
       var self = this;
       player.socket.emit('login/success', {
+        playerJSON: player.toJSON(),
         messages: self.chatHistory
       });
     }

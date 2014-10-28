@@ -1,5 +1,6 @@
 define(['jquery', 'config', 'model'], function($, config, model){
-  var UI = {
+  var 
+    UI = {
     arrangeMyHand: function(length){
       var $hand = $('#hand0'),
           screenWidth = $(window).width(),
@@ -148,6 +149,20 @@ define(['jquery', 'config', 'model'], function($, config, model){
         case 2: return [screenWidth / 4, 0];
         case 3: return [screenWidth * 3 / 4, 0];
         case 4: return [screenWidth, screenHeight / 2];
+      }
+    },
+    onEnterKeyPressed: function(onTextEntered){
+      var $chat = $('#chat');
+
+      if($chat.is(':visible')) {
+        var value = $chat.val().trim();
+        $chat.hide().val('');
+        $('body').focus();
+        if(value.length > 0) {
+          onTextEntered(value);
+        }
+      } else {
+        $chat.show().focus();
       }
     }
   };

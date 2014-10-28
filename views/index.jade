@@ -3,10 +3,7 @@ block content
   div(class="container") 
     h1(style="margin-top:250px;") Online Users: 
       span#online-player-count
-    ul#messages
-    form(id="chat")
-      input(id="chat-value" autocomplete="off" autofocus)
-      input(type="submit" value="Send")
+  
   div.box#master-suit-box
     button.suit
       img(src="/images/SmallC.png")
@@ -29,4 +26,16 @@ block content
   div#hand2.hand
   div#hand3.hand
   div#hand4.hand
+  input#chat.box(type="text")
+  div#chat0.chat-log.box
+    h2 Player
+  div#chat1.chat-log.box
+    h2 Player
+  div#chat2.chat-log.box
+    h2 Player
+  div#chat3.chat-log.box
+    h2 Player
+  div#chat4.chat-log.box
+    h2 Player
+
   script(data-main='/js/index.js' src='/js/lib/require.js')
