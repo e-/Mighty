@@ -242,9 +242,10 @@ input[type=number]:hover::-webkit-outer-spin-button {
 }
 
 .chat-log p{
-  margin-bottom:3px;
   margin-left:10px;
+  margin-bottom:5px;
   overflow:hidden;
+  height:20px;
 }
 
 .chat-log h2{
