@@ -93,6 +93,6 @@ requirejs([
   });
 
   server.listen(config.server.port, function(){
-    console.log('The sever started at ' + config.server.port + '.');
+    console.log('The server started at ' + config.server.port + '.');
   });
 });
